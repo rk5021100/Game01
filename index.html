@@ -16,6 +16,15 @@
   margin-top: 20px;
 }
 
+#instructions {
+  max-width: 90%;
+  background: #fff8dc;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 8px;
+}
+
 #game {
   display: flex;
   justify-content: space-around;
@@ -68,10 +77,20 @@ button {
   font-size: 16px;
 }
 
+#message {
+  font-size: 20px;
+  color: green;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
   </style>
 </head>
 <body>
-  <h1>Tower of Hanoi</h1>
+  <h1>Khel ke dikha</h1>
+  <div id="instructions">
+    Move all the disks from the first rod to the third rod. You can only move one disk at a time, and you can’t place a larger disk on top of a smaller one.
+  </div>
   <div>
     <label for="diskCount">Disks:</label>
     <select id="diskCount">
@@ -86,15 +105,18 @@ button {
     <div class="rod" id="rod2" onclick="handleRodClick(2)"></div>
     <div class="rod" id="rod3" onclick="handleRodClick(3)"></div>
     <div class="base"></div>
-  </div>  <script>
+  </div>
+  <div id="message"></div>  <script>
     let selectedDisk = null;
     let fromRod = null;
+    let totalDisks = 3;
 
     function initGame() {
       const rod1 = document.getElementById('rod1');
       const rods = [rod1, document.getElementById('rod2'), document.getElementById('rod3')];
       rods.forEach(rod => rod.innerHTML = '');
       const count = parseInt(document.getElementById('diskCount').value);
+      totalDisks = count;
       for (let i = count; i >= 1; i--) {
         const disk = document.createElement('div');
         disk.classList.add('disk', `disk${i}`);
@@ -103,6 +125,7 @@ button {
       }
       selectedDisk = null;
       fromRod = null;
+      document.getElementById('message').textContent = '';
     }
 
     function handleRodClick(rodNumber) {
@@ -122,6 +145,14 @@ button {
         selectedDisk.style.border = 'none';
         selectedDisk = null;
         fromRod = null;
+        checkWin();
+      }
+    }
+
+    function checkWin() {
+      const rod3 = document.getElementById('rod3');
+      if (rod3.childElementCount === totalDisks) {
+        document.getElementById('message').textContent = 'You Won!';
       }
     }
 
