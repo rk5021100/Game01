@@ -1,0 +1,130 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tower of Hanoi</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #f0f0f0;
+    }h1 {
+  margin-top: 20px;
+}
+
+#game {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  width: 100%;
+  max-width: 600px;
+  height: 300px;
+  margin: 20px 0;
+  position: relative;
+}
+
+.rod {
+  background: #444;
+  width: 10px;
+  height: 200px;
+  position: relative;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+}
+
+.disk {
+  position: relative;
+  height: 20px;
+  margin: 2px 0;
+  border-radius: 4px;
+  text-align: center;
+  line-height: 20px;
+  color: white;
+  font-size: 14px;
+}
+
+.disk1 { width: 60px; background: #e74c3c; }
+.disk2 { width: 80px; background: #f39c12; }
+.disk3 { width: 100px; background: #27ae60; }
+.disk4 { width: 120px; background: #3498db; }
+.disk5 { width: 140px; background: #9b59b6; }
+
+.base {
+  position: absolute;
+  bottom: 0;
+  height: 10px;
+  background: #222;
+  width: 100%;
+}
+
+button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+  </style>
+</head>
+<body>
+  <h1>Tower of Hanoi</h1>
+  <div>
+    <label for="diskCount">Disks:</label>
+    <select id="diskCount">
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+    </select>
+    <button onclick="initGame()">Start Game</button>
+  </div>
+  <div id="game">
+    <div class="rod" id="rod1" onclick="handleRodClick(1)"></div>
+    <div class="rod" id="rod2" onclick="handleRodClick(2)"></div>
+    <div class="rod" id="rod3" onclick="handleRodClick(3)"></div>
+    <div class="base"></div>
+  </div>  <script>
+    let selectedDisk = null;
+    let fromRod = null;
+
+    function initGame() {
+      const rod1 = document.getElementById('rod1');
+      const rods = [rod1, document.getElementById('rod2'), document.getElementById('rod3')];
+      rods.forEach(rod => rod.innerHTML = '');
+      const count = parseInt(document.getElementById('diskCount').value);
+      for (let i = count; i >= 1; i--) {
+        const disk = document.createElement('div');
+        disk.classList.add('disk', `disk${i}`);
+        disk.dataset.size = i;
+        rod1.appendChild(disk);
+      }
+      selectedDisk = null;
+      fromRod = null;
+    }
+
+    function handleRodClick(rodNumber) {
+      const rod = document.getElementById(`rod${rodNumber}`);
+      if (!selectedDisk) {
+        const lastDisk = rod.lastElementChild;
+        if (lastDisk) {
+          selectedDisk = lastDisk;
+          fromRod = rod;
+          selectedDisk.style.border = '2px solid black';
+        }
+      } else {
+        const topDisk = rod.lastElementChild;
+        if (!topDisk || parseInt(topDisk.dataset.size) > parseInt(selectedDisk.dataset.size)) {
+          rod.appendChild(selectedDisk);
+        }
+        selectedDisk.style.border = 'none';
+        selectedDisk = null;
+        fromRod = null;
+      }
+    }
+
+    initGame();
+  </script></body>
+</html>
